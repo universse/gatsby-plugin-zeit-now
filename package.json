@@ -1,13 +1,13 @@
 {
-  "name": "@universse/gatsby-plugin-now",
+  "name": "gatsby-plugin-zeit-now",
   "author": "Phuoc <phuoc317049@gmail.com>",
   "version": "0.0.1",
   "description": "Deploy GatsbyJS site on Zeit Now",
   "license": "MIT",
-  "homepage": "https://github.com/universse/gatsby-plugin-now",
+  "homepage": "https://github.com/universse/gatsby-plugin-zeit-now",
   "repository": {
     "type": "git",
-    "url": "https://github.com/universse/gatsby-plugin-now"
+    "url": "https://github.com/universse/gatsby-plugin-zeit-now"
   },
   "keywords": [
     "gatsby",
@@ -30,7 +30,7 @@
     "watch": "babel -w src --out-dir . --ignore **/__tests__"
   },
   "bugs": {
-    "url": "https://github.com/universse/gatsby-plugin-now/issues"
+    "url": "https://github.com/universse/gatsby-plugin-zeit-now/issues"
   },
   "main": "index.js"
 }

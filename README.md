@@ -1,4 +1,4 @@
-# gatsby-plugin-now
+# gatsby-plugin-zeit-now
 
 Deploy GatsbyJS site on Zeit Now.
 
@@ -7,13 +7,13 @@ Deploy GatsbyJS site on Zeit Now.
 With Yarn:
 
 ```bash
-yarn add @universse/gatsby-plugin-now
+yarn add gatsby-plugin-zeit-now
 ```
 
 Or with npm:
 
 ```bash
-npm install --save @universse/gatsby-plugin-now
+npm install --save gatsby-plugin-zeit-now
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ npm install --save @universse/gatsby-plugin-now
 Add plugin to gatsby-config.js
 
 ```js
-plugins: ['@universse/gatsby-plugin-now']
+plugins: ['gatsby-plugin-zeit-now']
 ```
 
 ## License
