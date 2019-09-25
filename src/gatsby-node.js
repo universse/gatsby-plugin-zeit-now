@@ -49,6 +49,10 @@ const caching = [
     ...alwaysCache
   },
   {
+    src: '/icons/(.*)',
+    ...alwaysCache
+  },
+  {
     src: '/(.*).js',
     ...alwaysCache
   },
