@@ -74,7 +74,10 @@ exports.onPostBuild = ({ store }) => {
 
   // redirects
   redirects.forEach(({ fromPath, toPath, force, isPermanent, statusCode }) => {
-    if (!statusCode || statusCode === 200) {
+    let status = isPermanent ? 301 : 302
+    status = statusCode || status
+
+    if (status === 200) {
       pre.push({
         src: fromPath,
         dest: toPath
@@ -84,7 +87,7 @@ exports.onPostBuild = ({ store }) => {
 
     const route = {
       src: fromPath,
-      status: statusCode || (isPermanent ? 301 : 302),
+      status,
       headers: { Location: toPath }
     }
 
