@@ -41,23 +41,15 @@ const caching = [
     ...neverCache
   },
   {
-    src: '/page-data/(.*)',
+    src: '/page-data/.*',
     ...neverCache
   },
   {
-    src: '/static/(.*)',
+    src: '/(icons|static)/.*',
     ...alwaysCache
   },
   {
-    src: '/icons/(.*)',
-    ...alwaysCache
-  },
-  {
-    src: '/(.*).js',
-    ...alwaysCache
-  },
-  {
-    src: '/(.*).css',
+    src: '/(.*).(js|css)',
     ...alwaysCache
   }
 ]
