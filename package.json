@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-zeit-now",
   "author": "Phuoc <phuoc317049@gmail.com>",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Deploy GatsbyJS site on Zeit Now",
   "license": "MIT",
   "homepage": "https://github.com/universse/gatsby-plugin-zeit-now",
