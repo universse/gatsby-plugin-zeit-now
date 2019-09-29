@@ -91,7 +91,7 @@ exports.onPostBuild = ({ store }) => {
     .filter(page => page.matchPath && page.matchPath !== page.path)
     .forEach(page =>
       pre.push({
-        src: page.matchPath.replace('*', '.*'),
+        src: page.matchPath.replace(/\*|:[^/]+/gi, '.*'),
         dest: page.path
       })
     )
