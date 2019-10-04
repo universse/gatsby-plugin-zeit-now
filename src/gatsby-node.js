@@ -56,9 +56,9 @@ const caching = [
 
 const filesystem = { handle: 'filesystem' }
 
-const notFound = { src: '/(.*)', status: 404, dest: '/404' }
+const notFound = { src: '/.*', status: 404, dest: '/404' }
 
-exports.onPostBuild = ({ store }) => {
+exports.onPostBuild = ({ store }, { securityHeaders = {} } = {}) => {
   const { pages, program, redirects } = store.getState()
 
   const pre = []
@@ -95,6 +95,9 @@ exports.onPostBuild = ({ store }) => {
         dest: page.path
       })
     )
+
+  // merge securityHeaders from pluginOptions
+  security.headers = { ...security.headers, ...securityHeaders }
 
   const routes = [security, ...caching, ...pre, filesystem, ...post, notFound]
 

@@ -30,6 +30,30 @@ Add plugin to gatsby-config.js
 plugins: ['gatsby-plugin-zeit-now']
 ```
 
+### Options
+
+- `securityHeaders` allows overriding of or adding to included basic security headers (shown below).
+
+```js
+plugins: [
+  {
+    resolve: 'gatsby-plugin-zeit-now',
+    options: {
+      securityHeaders: {
+        'referrer-policy': 'same-origin',
+        'feature-policy': "geolocation 'self'; microphone 'self'; camera 'self'",
+        'expect-ct': 'max-age=604800, enforce',
+        'strict-transport-security': 'max-age=31536000; includeSubDomains',
+        'x-frame-options': 'DENY',
+        'x-xss-protection': '1; mode=block',
+        'x-content-type-options': 'nosniff',
+        'x-download-options': 'noopen'
+      }
+    },
+  },
+],
+```
+
 ## Inspirations
 
 [gatsby-plugin-netlify](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-netlify)
