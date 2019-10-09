@@ -32,16 +32,17 @@ plugins: ['gatsby-plugin-zeit-now']
 
 ### Options
 
-- `securityHeaders` allows overriding of or adding to included basic security headers (shown below).
+- `globalHeaders` allows modifying default headers (shown below) that apply to all routes.
 
 ```js
 plugins: [
   {
     resolve: 'gatsby-plugin-zeit-now',
     options: {
-      securityHeaders: {
+      globalHeaders: {
         'referrer-policy': 'same-origin',
-        'feature-policy': "geolocation 'self'; microphone 'self'; camera 'self'",
+        'feature-policy':
+          "geolocation 'self'; microphone 'self'; camera 'self'",
         'expect-ct': 'max-age=604800, enforce',
         'strict-transport-security': 'max-age=31536000; includeSubDomains',
         'x-frame-options': 'DENY',
@@ -49,9 +50,27 @@ plugins: [
         'x-content-type-options': 'nosniff',
         'x-download-options': 'noopen'
       }
-    },
-  },
-],
+    }
+  }
+]
+```
+
+- `headers` allows configuring per-route headers.
+
+```js
+plugins: [
+  {
+    resolve: 'gatsby-plugin-zeit-now',
+    options: {
+      headers: {
+        '/about': {
+          'content-security-policy':
+            "base-uri 'self'; default-src 'self' https://fonts.googleapis.com data:; object-src 'none'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
+        }
+      }
+    }
+  }
+]
 ```
 
 ## Inspirations

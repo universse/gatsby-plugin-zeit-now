@@ -4,20 +4,22 @@ const { join } = require('path')
 // Do not change this.
 const REDIRECT_FILE_NAME = '__now_routes_g4t5bY.json'
 
-const security = {
-  src: '/.*',
-  headers: {
-    'referrer-policy': 'same-origin',
-    'feature-policy': "geolocation 'self'; microphone 'self'; camera 'self'",
-    'expect-ct': 'max-age=604800, enforce',
-    'strict-transport-security': 'max-age=31536000; includeSubDomains',
-    'x-frame-options': 'DENY',
-    'x-xss-protection': '1; mode=block',
-    'x-content-type-options': 'nosniff',
-    'x-download-options': 'noopen'
-  },
-  continue: true
-}
+const security = [
+  {
+    src: '/.*',
+    headers: {
+      'referrer-policy': 'same-origin',
+      'feature-policy': "geolocation 'self'; microphone 'self'; camera 'self'",
+      'expect-ct': 'max-age=604800, enforce',
+      'strict-transport-security': 'max-age=31536000; includeSubDomains',
+      'x-frame-options': 'DENY',
+      'x-xss-protection': '1; mode=block',
+      'x-content-type-options': 'nosniff',
+      'x-download-options': 'noopen'
+    },
+    continue: true
+  }
+]
 
 const neverCache = {
   headers: { 'cache-control': 'public, max-age=0, must-revalidate' },
@@ -58,7 +60,10 @@ const filesystem = { handle: 'filesystem' }
 
 const notFound = { src: '/.*', status: 404, dest: '/404' }
 
-exports.onPostBuild = ({ store }, { securityHeaders = {} } = {}) => {
+exports.onPostBuild = (
+  { store },
+  { globalHeaders = {}, headers = {} } = {}
+) => {
   const { pages, program, redirects } = store.getState()
 
   const pre = []
@@ -96,10 +101,26 @@ exports.onPostBuild = ({ store }, { securityHeaders = {} } = {}) => {
       })
     )
 
-  // merge securityHeaders from pluginOptions
-  security.headers = { ...security.headers, ...securityHeaders }
+  // merge globalHeaders from pluginOptions
+  security[0].headers = { ...security[0].headers, ...globalHeaders }
 
-  const routes = [security, ...caching, ...pre, filesystem, ...post, notFound]
+  // add per-route headers from pluginOptions
+  Object.entries(headers).forEach(([route, routeHeaders]) => {
+    security.push({
+      src: route,
+      headers: routeHeaders,
+      continue: true
+    })
+  })
+
+  const routes = [
+    ...security,
+    ...caching,
+    ...pre,
+    filesystem,
+    ...post,
+    notFound
+  ]
 
   writeFileSync(
     join(program.directory, 'public', REDIRECT_FILE_NAME),
