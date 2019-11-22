@@ -21,38 +21,24 @@ const security = [
   }
 ]
 
-const neverCache = {
-  headers: { 'cache-control': 'public, max-age=0, must-revalidate' },
-  continue: true
-}
 const alwaysCache = {
   headers: { 'cache-control': 'public, max-age=31536000, immutable' },
   continue: true
 }
 
-const sw = {
-  src: '/sw.js',
-  ...neverCache,
-  continue: false
-}
-
 const caching = [
-  sw,
   {
-    src: '/(.*).html',
-    ...neverCache
-  },
-  {
-    src: '/page-data/.*',
-    ...neverCache
-  },
-  {
-    src: '/(icons|static)/.*',
+    src: '^/(icons|static)/(.*)$',
     ...alwaysCache
   },
   {
-    src: '/(.*).(js|css)',
+    src: '^/.*\\.(js|css)$',
     ...alwaysCache
+  },
+  {
+    src: '^/(sw\\.js|app-data\\.json|.*\\.html|page-data/.*)$',
+    headers: { 'cache-control': 'public,max-age=0,must-revalidate' },
+    continue: true
   }
 ]
 
@@ -64,7 +50,11 @@ exports.onPostBuild = (
   { store },
   { globalHeaders = {}, headers = {} } = {}
 ) => {
-  const { pages, program, redirects } = store.getState()
+  const {
+    pages,
+    program: { directory },
+    redirects
+  } = store.getState()
 
   const pre = []
   const post = []
@@ -123,7 +113,7 @@ exports.onPostBuild = (
   ]
 
   writeFileSync(
-    join(program.directory, 'public', REDIRECT_FILE_NAME),
+    join(directory, 'public', REDIRECT_FILE_NAME),
     JSON.stringify(routes)
   )
 }

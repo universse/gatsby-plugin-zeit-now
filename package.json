@@ -1,7 +1,7 @@
 {
   "name": "gatsby-plugin-zeit-now",
   "author": "Phuoc <phuoc317049@gmail.com>",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Deploy GatsbyJS site on Zeit Now",
   "license": "MIT",
   "homepage": "https://github.com/universse/gatsby-plugin-zeit-now",
@@ -19,9 +19,9 @@
     "gatsby": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.3",
-    "@babel/core": "^7.6.3",
-    "babel-preset-gatsby-package": "^0.2.4",
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2",
+    "babel-preset-gatsby-package": "^0.2.11",
     "cross-env": "^6.0.3"
   },
   "scripts": {
