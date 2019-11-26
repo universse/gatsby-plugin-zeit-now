@@ -64,19 +64,17 @@ exports.onPostBuild = (
     let status = isPermanent ? 301 : 302
     status = statusCode || status
 
-    if (status === 200) {
-      pre.push({
-        src: fromPath,
-        dest: toPath
-      })
-      return
-    }
-
-    const route = {
-      src: fromPath,
-      status,
-      headers: { Location: toPath }
-    }
+    const route =
+      status === 200
+        ? {
+            src: fromPath,
+            dest: toPath
+          }
+        : {
+            src: fromPath,
+            status,
+            headers: { Location: toPath }
+          }
 
     force ? pre.push(route) : post.push(route)
   })
