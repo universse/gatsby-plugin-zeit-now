@@ -15,36 +15,38 @@ const security = [
       'x-frame-options': 'DENY',
       'x-xss-protection': '1; mode=block',
       'x-content-type-options': 'nosniff',
-      'x-download-options': 'noopen'
+      'x-download-options': 'noopen',
     },
-    continue: true
-  }
+    continue: true,
+  },
 ]
 
 const alwaysCache = {
   headers: { 'cache-control': 'public, max-age=31536000, immutable' },
-  continue: true
+  continue: true,
 }
 
 const caching = [
   {
     src: '^/(icons|static)/(.*)$',
-    ...alwaysCache
+    ...alwaysCache,
   },
   {
     src: '^/.*\\.(js|css)$',
-    ...alwaysCache
+    ...alwaysCache,
   },
   {
     src: '^/(sw\\.js|app-data\\.json|.*\\.html|page-data/.*)$',
     headers: { 'cache-control': 'public,max-age=0,must-revalidate' },
-    continue: true
-  }
+    continue: true,
+  },
 ]
 
 const filesystem = { handle: 'filesystem' }
 
 const notFound = { src: '/.*', status: 404, dest: '/404' }
+
+const localizedNotFound = []
 
 exports.onPostBuild = (
   { store },
@@ -53,7 +55,7 @@ exports.onPostBuild = (
   const {
     pages,
     program: { directory },
-    redirects
+    redirects,
   } = store.getState()
 
   const pre = []
@@ -68,26 +70,38 @@ exports.onPostBuild = (
       status === 200
         ? {
             src: fromPath,
-            dest: toPath
+            dest: toPath,
           }
         : {
             src: fromPath,
             status,
-            headers: { Location: toPath }
+            headers: { Location: toPath },
           }
 
     force ? pre.push(route) : post.push(route)
   })
 
   // client-only routes
+  const GATSBY_MATCHPATH_REGEXP = /\*|:[^/]+/gi
+
   Array.from(pages.values())
     .filter(page => page.matchPath && page.matchPath !== page.path)
-    .forEach(page =>
-      pre.push({
-        src: page.matchPath.replace(/\*|:[^/]+/gi, '.*'),
-        dest: page.path
-      })
-    )
+    .forEach(page => {
+      const src = page.matchPath.replace(GATSBY_MATCHPATH_REGEXP, '.*')
+      // eg. en/404/
+      if (/\/404\/?$/.test(page.path)) {
+        localizedNotFound.push({
+          src,
+          status: 404,
+          dest: page.path,
+        })
+      } else {
+        pre.push({
+          src,
+          dest: page.path,
+        })
+      }
+    })
 
   // merge globalHeaders from pluginOptions
   security[0].headers = { ...security[0].headers, ...globalHeaders }
@@ -97,7 +111,7 @@ exports.onPostBuild = (
     security.push({
       src: route,
       headers: routeHeaders,
-      continue: true
+      continue: true,
     })
   })
 
@@ -107,7 +121,8 @@ exports.onPostBuild = (
     ...pre,
     filesystem,
     ...post,
-    notFound
+    ...localizedNotFound,
+    notFound,
   ]
 
   writeFileSync(
