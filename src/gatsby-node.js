@@ -83,24 +83,26 @@ exports.onPostBuild = (
 
   // client-only routes
   const GATSBY_MATCHPATH_REGEXP = /\*|:[^/]+/gi
+  const NOT_FOUND_REGEXP = /\/404\/?$/
 
   Array.from(pages.values())
     .filter(page => page.matchPath && page.matchPath !== page.path)
     .forEach(page => {
       const src = page.matchPath.replace(GATSBY_MATCHPATH_REGEXP, '.*')
-      // eg. en/404/
-      if (/\/404\/?$/.test(page.path)) {
-        localizedNotFound.push({
-          src,
-          status: 404,
-          dest: page.path,
-        })
-      } else {
-        pre.push({
-          src,
-          dest: page.path,
-        })
-      }
+      const dest = page.path
+
+      const isNotFoundPage = NOT_FOUND_REGEXP.test(dest)
+
+      isNotFoundPage
+        ? localizedNotFound.push({
+            src,
+            status: 404,
+            dest,
+          })
+        : pre.push({
+            src,
+            dest,
+          })
     })
 
   // merge globalHeaders from pluginOptions
