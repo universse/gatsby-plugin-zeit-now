@@ -50,7 +50,7 @@ const localizedNotFound = []
 
 exports.onPostBuild = (
   { store },
-  { globalHeaders = {}, headers = {} } = {}
+  { globalHeaders = {}, headers = {}, redirects: nowRedirects = [] } = {}
 ) => {
   const {
     pages,
@@ -60,6 +60,14 @@ exports.onPostBuild = (
 
   const pre = []
   const post = []
+
+  nowRedirects.forEach(({ source, destination, statusCode = 308 }) => {
+    post.push({
+      src: source,
+      status: statusCode,
+      headers: { Location: destination },
+    })
+  })
 
   // redirects
   redirects.forEach(({ fromPath, toPath, force, isPermanent, statusCode }) => {
