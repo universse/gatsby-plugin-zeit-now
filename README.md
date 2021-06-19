@@ -1,6 +1,6 @@
 # gatsby-plugin-zeit-now
 
-Configuring Zeit Now [routes](https://zeit.co/docs/v2/advanced/routes/), enhancing [zero-config deployments](https://zeit.co/blog/zero-config).
+Configuring Zeit Now/Vercel [routes](https://vercel.com/docs/configuration#project/routes), enhancing [zero-config deployments](https://vercel.com/blog/zero-config).
 
 ## How it works
 
